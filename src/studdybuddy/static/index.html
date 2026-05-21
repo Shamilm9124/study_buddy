@@ -1,0 +1,2312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Buddy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #172026;
+      --muted: #65717a;
+      --line: #d9e1e7;
+      --paper: #fbf8f1;
+      --panel: #ffffff;
+      --mint: #1f9d78;
+      --mint-dark: #127057;
+      --coral: #ff6b5f;
+      --sun: #f7b731;
+      --blue: #3d7eff;
+      --violet: #8b5cf6;
+      --shadow: 0 18px 44px rgba(32, 45, 55, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        linear-gradient(120deg, rgba(31, 157, 120, 0.14), transparent 36%),
+        linear-gradient(235deg, rgba(255, 107, 95, 0.16), transparent 34%),
+        var(--paper);
+    }
+
+    button,
+    textarea,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .topbar {
+      min-height: 72px;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid rgba(23, 32, 38, 0.08);
+      background: rgba(251, 248, 241, 0.84);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: conic-gradient(from 120deg, var(--mint), var(--blue), var(--coral), var(--sun), var(--mint));
+      box-shadow: 0 12px 24px rgba(31, 157, 120, 0.22);
+      flex: 0 0 auto;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .icon-button,
+    .primary-button,
+    .secondary-button {
+      min-height: 42px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .icon-button {
+      width: 42px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid var(--line);
+    }
+
+    .primary-button,
+    .secondary-button {
+      padding: 0 16px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .primary-button {
+      color: #fff;
+      background: var(--mint);
+      box-shadow: 0 12px 24px rgba(31, 157, 120, 0.22);
+    }
+
+    .secondary-button {
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .icon-button:hover,
+    .primary-button:hover,
+    .secondary-button:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+
+    .primary-button:disabled,
+    .secondary-button:disabled {
+      opacity: 0.58;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .layout {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+      gap: 22px;
+      padding: 22px;
+    }
+
+    .workspace,
+    .study-board,
+    .calculator-panel {
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(217, 225, 231, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .workspace,
+    .study-board {
+      min-height: calc(100vh - 116px);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-head {
+      min-height: 68px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .panel-title {
+      min-width: 0;
+    }
+
+    .panel-title h2 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: 0;
+    }
+
+    .panel-title p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .status-pill {
+      min-height: 32px;
+      padding: 0 12px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--mint-dark);
+      background: rgba(31, 157, 120, 0.12);
+      font-size: 12px;
+      font-weight: 700;
+      flex: 0 0 auto;
+    }
+
+    .personality-control {
+      min-width: 210px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .personality-control label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .select-wrap {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+    }
+
+    .select-wrap i {
+      color: var(--mint-dark);
+    }
+
+    .select-wrap select {
+      min-width: 0;
+      width: 100%;
+      appearance: none;
+      border: 0;
+      outline: 0;
+      color: var(--ink);
+      background: transparent;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .diagnostic-dashboard {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(61, 126, 255, 0.08), transparent 55%),
+        rgba(255, 255, 255, 0.5);
+      display: grid;
+      gap: 14px;
+    }
+
+    .diagnostic-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .diagnostic-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .diagnostic-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--blue);
+      flex: 0 0 auto;
+    }
+
+    .diagnostic-heading h3 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .diagnostic-heading p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .diagnostic-level {
+      min-height: 32px;
+      padding: 0 10px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #17428f;
+      background: #dfeaff;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .diagnostic-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .metric-card {
+      min-height: 74px;
+      padding: 11px;
+      border: 1px solid rgba(217, 225, 231, 0.92);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.82);
+      display: grid;
+      align-content: space-between;
+      gap: 6px;
+    }
+
+    .metric-card span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .metric-card strong {
+      font-size: 19px;
+      line-height: 1.1;
+      overflow-wrap: anywhere;
+    }
+
+    .diagnostic-lower {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 0.72fr);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .signal-list,
+    .next-step {
+      padding: 12px;
+      border: 1px solid rgba(217, 225, 231, 0.92);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.74);
+    }
+
+    .signal-row {
+      display: grid;
+      grid-template-columns: 80px minmax(0, 1fr) 36px;
+      align-items: center;
+      gap: 9px;
+      min-height: 27px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .signal-row span:first-child,
+    .next-step span {
+      color: var(--muted);
+    }
+
+    .signal-track {
+      height: 8px;
+      border-radius: 999px;
+      background: #e8eef2;
+      overflow: hidden;
+    }
+
+    .signal-fill {
+      height: 100%;
+      width: 8%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--mint), var(--blue));
+      transition: width 0.2s ease;
+    }
+
+    .signal-value {
+      text-align: right;
+      color: var(--ink);
+    }
+
+    .next-step {
+      min-height: 100%;
+      display: grid;
+      gap: 6px;
+      align-content: start;
+    }
+
+    .next-step span {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .next-step p {
+      margin: 0;
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .chat-log {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .empty-state {
+      margin: auto;
+      max-width: 520px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .empty-state .spark {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(135deg, var(--blue), var(--mint));
+    }
+
+    .empty-state h2 {
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: 24px;
+    }
+
+    .empty-state p {
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .message {
+      max-width: min(82%, 760px);
+      padding: 14px 16px;
+      border-radius: 8px;
+      line-height: 1.62;
+      font-size: 14px;
+      animation: enter 0.22s ease;
+      overflow-wrap: anywhere;
+    }
+
+    @keyframes enter {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message.user {
+      align-self: flex-end;
+      color: #fff;
+      background: var(--blue);
+      box-shadow: 0 12px 22px rgba(61, 126, 255, 0.2);
+    }
+
+    .message.bot {
+      align-self: flex-start;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .message.bot h1,
+    .message.bot h2,
+    .message.bot h3 {
+      margin: 12px 0 6px;
+      font-size: 16px;
+    }
+
+    .message.bot h1:first-child,
+    .message.bot h2:first-child,
+    .message.bot h3:first-child {
+      margin-top: 0;
+    }
+
+    .message.bot ul,
+    .message.bot ol {
+      padding-left: 20px;
+      margin: 8px 0;
+    }
+
+    .live-search-badge {
+      margin-bottom: 8px;
+      min-height: 28px;
+      padding: 5px 8px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #17428f;
+      background: #dfeaff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .related-topics {
+      padding: 12px 16px 0;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+      display: grid;
+      gap: 9px;
+    }
+
+    .related-topics[hidden] {
+      display: none;
+    }
+
+    .related-topics[hidden] + .composer {
+      border-top: 1px solid var(--line);
+    }
+
+    .related-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .related-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .topic-chip {
+      min-height: 34px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      color: #17428f;
+      background: #dfeaff;
+      border: 1px solid rgba(61, 126, 255, 0.2);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.25;
+      text-align: left;
+    }
+
+    .topic-chip:hover {
+      background: rgba(31, 157, 120, 0.14);
+      color: var(--mint-dark);
+      border-color: rgba(31, 157, 120, 0.24);
+    }
+
+    .topic-chip:disabled {
+      opacity: 0.58;
+      cursor: not-allowed;
+    }
+
+    .composer {
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.72);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .composer textarea {
+      width: 100%;
+      min-height: 52px;
+      max-height: 132px;
+      resize: none;
+      outline: none;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      color: var(--ink);
+      background: #fff;
+      line-height: 1.45;
+    }
+
+    .composer textarea:focus {
+      border-color: var(--mint);
+      box-shadow: 0 0 0 4px rgba(31, 157, 120, 0.12);
+    }
+
+    .board-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px;
+      display: grid;
+      align-content: start;
+      gap: 18px;
+    }
+
+    .summary-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .summary-chip {
+      min-height: 34px;
+      padding: 8px 11px;
+      border-radius: 8px;
+      color: #17312a;
+      background: rgba(31, 157, 120, 0.12);
+      border: 1px solid rgba(31, 157, 120, 0.22);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .flash-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .flashcard {
+      min-height: 232px;
+      border-radius: 8px;
+      padding: 16px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 30px rgba(23, 32, 38, 0.14);
+    }
+
+    .flashcard::after {
+      content: "";
+      position: absolute;
+      width: 118px;
+      height: 118px;
+      right: -42px;
+      top: -42px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .flashcard:nth-child(4n + 1) {
+      background: linear-gradient(145deg, #ff6b5f, #e54569);
+    }
+
+    .flashcard:nth-child(4n + 2) {
+      background: linear-gradient(145deg, #3d7eff, #1f9d78);
+    }
+
+    .flashcard:nth-child(4n + 3) {
+      background: linear-gradient(145deg, #8b5cf6, #3d7eff);
+    }
+
+    .flashcard:nth-child(4n + 4) {
+      background: linear-gradient(145deg, #f7b731, #f06c3b);
+    }
+
+    .quiz-card:nth-child(n) {
+      background: linear-gradient(145deg, #172026, #3d7eff);
+    }
+
+    .flashcard-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .flashcard-number {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.22);
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .flashcard h3 {
+      margin: 0;
+      position: relative;
+      z-index: 1;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .flashcard p {
+      margin: 0;
+      position: relative;
+      z-index: 1;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    .flashcard .question {
+      font-weight: 700;
+    }
+
+    .answer {
+      padding: 12px;
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.96);
+      background: rgba(255, 255, 255, 0.18);
+      display: none;
+    }
+
+    .flashcard.revealed .answer {
+      display: block;
+    }
+
+    .flashcard.quiz-card {
+      background: linear-gradient(145deg, #172026, #3d7eff);
+    }
+
+    .quiz-card .answer {
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .mcq-options {
+      display: grid;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mcq-option {
+      min-height: 42px;
+      padding: 9px 11px;
+      border-radius: 8px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 9px;
+      text-align: left;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .mcq-option:disabled {
+      cursor: default;
+      opacity: 0.72;
+    }
+
+    .mcq-option.correct {
+      opacity: 1;
+      background: rgba(31, 157, 120, 0.92);
+      border-color: rgba(31, 157, 120, 0.96);
+    }
+
+    .mcq-option.incorrect {
+      opacity: 1;
+      background: rgba(255, 107, 95, 0.92);
+      border-color: rgba(255, 107, 95, 0.96);
+    }
+
+    .option-letter {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.22);
+      font-size: 12px;
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .quiz-feedback {
+      padding: 10px 11px;
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.96);
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: none;
+      position: relative;
+      z-index: 1;
+      line-height: 1.45;
+      font-size: 13px;
+    }
+
+    .quiz-card.answered .quiz-feedback {
+      display: block;
+    }
+
+    .quiz-score-panel {
+      padding: 16px;
+      border-radius: 8px;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(31, 157, 120, 0.12), transparent 55%),
+        #fff;
+      border: 1px solid rgba(217, 225, 231, 0.95);
+      box-shadow: 0 12px 24px rgba(23, 32, 38, 0.08);
+      display: grid;
+      gap: 12px;
+    }
+
+    .quiz-score-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .quiz-score-top h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .quiz-score-value {
+      min-height: 36px;
+      padding: 0 12px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      color: #fff;
+      background: var(--mint);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .quiz-score-progress {
+      height: 9px;
+      border-radius: 999px;
+      background: #e8eef2;
+      overflow: hidden;
+    }
+
+    .quiz-score-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--mint), var(--blue));
+      transition: width 0.2s ease;
+    }
+
+    .quiz-score-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 13px;
+    }
+
+    .quiz-actions {
+      margin-top: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .reveal-button {
+      margin-top: auto;
+      min-height: 38px;
+      border-radius: 8px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.9);
+      font-weight: 800;
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quiz-actions .reveal-button {
+      grid-column: 1 / -1;
+      margin-top: 0;
+    }
+
+    .quiz-check {
+      min-height: 38px;
+      border-radius: 8px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .quiz-check.correct {
+      background: rgba(31, 157, 120, 0.86);
+      border-color: rgba(31, 157, 120, 0.9);
+    }
+
+    .quiz-check.review {
+      background: rgba(255, 107, 95, 0.86);
+      border-color: rgba(255, 107, 95, 0.9);
+    }
+
+    .board-empty {
+      min-height: 440px;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed rgba(101, 113, 122, 0.28);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(61, 126, 255, 0.08), transparent),
+        linear-gradient(180deg, rgba(247, 183, 49, 0.12), transparent);
+    }
+
+    .board-empty h3 {
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: 20px;
+    }
+
+    .board-empty p {
+      max-width: 360px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .thinking {
+      align-self: flex-start;
+      padding: 14px 16px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid var(--line);
+      display: inline-flex;
+      gap: 8px;
+    }
+
+    .thinking span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--mint);
+      animation: pulse 1.2s infinite ease-in-out;
+    }
+
+    .thinking span:nth-child(2) {
+      animation-delay: 0.14s;
+      background: var(--blue);
+    }
+
+    .thinking span:nth-child(3) {
+      animation-delay: 0.28s;
+      background: var(--coral);
+    }
+
+    @keyframes pulse {
+      0%,
+      80%,
+      100% {
+        transform: scale(0.7);
+        opacity: 0.5;
+      }
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .calculator-panel {
+      width: min(380px, calc(100vw - 32px));
+      max-height: calc(100vh - 96px);
+      border-radius: 8px;
+      padding: 16px;
+      position: fixed;
+      top: 84px;
+      right: 22px;
+      z-index: 20;
+      display: none;
+      overflow-y: auto;
+    }
+
+    body.calculator-open .calculator-panel {
+      display: block;
+    }
+
+    .calculator-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .calculator-header h2 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .calc-mode {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .calc-mode button {
+      min-height: 38px;
+      cursor: pointer;
+      background: #fff;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .calc-mode button.active {
+      color: #fff;
+      background: var(--blue);
+    }
+
+    .calc-display {
+      min-height: 94px;
+      padding: 14px;
+      border-radius: 8px;
+      color: #fff;
+      background: #172026;
+      display: grid;
+      align-content: end;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .calc-expression {
+      min-height: 18px;
+      color: #9eb0bd;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .calc-result {
+      text-align: right;
+      font-size: 28px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .calc-key {
+      min-width: 0;
+      min-height: 42px;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #eef3f5;
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .calc-key.operator {
+      background: #dfeaff;
+      color: #17428f;
+    }
+
+    .calc-key.function {
+      background: #efe7ff;
+      color: #5b2fb3;
+    }
+
+    .calc-key.danger {
+      background: #ffe2df;
+      color: #a33129;
+    }
+
+    .calc-key.equal {
+      grid-column: span 2;
+      color: #fff;
+      background: var(--mint);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+      padding: 12px 14px;
+      border-radius: 8px;
+      color: #fff;
+      background: #172026;
+      box-shadow: var(--shadow);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 30;
+      max-width: min(520px, calc(100vw - 32px));
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .workspace,
+      .study-board {
+        min-height: 620px;
+      }
+
+      .diagnostic-metrics,
+      .diagnostic-lower {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        padding: 12px 14px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .top-actions {
+        width: 100%;
+        justify-content: stretch;
+      }
+
+      .top-actions .primary-button,
+      .top-actions .secondary-button {
+        flex: 1;
+      }
+
+      .layout {
+        padding: 14px;
+        gap: 14px;
+      }
+
+      .panel-head,
+      .diagnostic-top,
+      .composer {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .diagnostic-metrics,
+      .diagnostic-lower {
+        grid-template-columns: 1fr;
+      }
+
+      .composer {
+        display: flex;
+      }
+
+      .message {
+        max-width: 94%;
+      }
+
+      .flash-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .calculator-panel {
+        top: 118px;
+        right: 14px;
+        left: 14px;
+        width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><i data-lucide="graduation-cap"></i></div>
+        <div>
+          <h1>Study Buddy</h1>
+          <p>AI learning desk with chat, calculator, and flashcards</p>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-button" id="calculatorToggle" type="button" aria-label="Open calculator" title="Calculator">
+          <i data-lucide="calculator"></i>
+        </button>
+        <button class="secondary-button" id="clearBtn" type="button">
+          <i data-lucide="rotate-ccw"></i>
+          Reset
+        </button>
+        <button class="secondary-button" id="quizBtn" type="button">
+          <i data-lucide="circle-help"></i>
+          Quiz
+        </button>
+        <button class="primary-button" id="flashBtn" type="button">
+          <i data-lucide="layers-3"></i>
+          Flashcards
+        </button>
+      </div>
+    </header>
+
+    <section class="layout">
+      <main class="workspace" aria-label="Study chat">
+        <div class="panel-head">
+          <div class="panel-title">
+            <h2>Learning Chat</h2>
+            <p>Ask, revise, and build a study set from the session.</p>
+          </div>
+          <div class="personality-control">
+            <label for="personalitySelect">Explain Like</label>
+            <div class="select-wrap">
+              <i data-lucide="messages-square"></i>
+              <select id="personalitySelect" aria-label="Explain like">
+                <option value="Teacher">Teacher</option>
+                <option value="Friend">Friend</option>
+              </select>
+              <i data-lucide="chevron-down"></i>
+            </div>
+          </div>
+          <div class="status-pill"><i data-lucide="sparkles"></i><span id="messageCount">0 notes</span></div>
+        </div>
+
+        <section class="diagnostic-dashboard" aria-label="Student diagnostic dashboard">
+          <div class="diagnostic-top">
+            <div class="diagnostic-heading">
+              <div class="diagnostic-icon" aria-hidden="true"><i data-lucide="activity"></i></div>
+              <div>
+                <h3>Student Diagnostic</h3>
+                <p id="diagnosticSummary">Waiting for the first question.</p>
+              </div>
+            </div>
+            <div class="diagnostic-level"><i data-lucide="gauge"></i><span id="diagnosticLevel">Baseline</span></div>
+          </div>
+
+          <div class="diagnostic-metrics">
+            <div class="metric-card">
+              <span>Questions</span>
+              <strong id="diagnosticQuestions">0</strong>
+            </div>
+            <div class="metric-card">
+              <span>Answers</span>
+              <strong id="diagnosticAnswers">0</strong>
+            </div>
+            <div class="metric-card">
+              <span>Avg Words</span>
+              <strong id="diagnosticWords">0</strong>
+            </div>
+            <div class="metric-card">
+              <span>Focus</span>
+              <strong id="diagnosticFocus">New</strong>
+            </div>
+          </div>
+
+          <div class="diagnostic-lower">
+            <div class="signal-list" aria-label="Learning signals">
+              <div class="signal-row">
+                <span>Clarity</span>
+                <div class="signal-track"><div class="signal-fill" id="claritySignal"></div></div>
+                <span class="signal-value" id="clarityValue">0%</span>
+              </div>
+              <div class="signal-row">
+                <span>Practice</span>
+                <div class="signal-track"><div class="signal-fill" id="practiceSignal"></div></div>
+                <span class="signal-value" id="practiceValue">0%</span>
+              </div>
+              <div class="signal-row">
+                <span>Recall</span>
+                <div class="signal-track"><div class="signal-fill" id="recallSignal"></div></div>
+                <span class="signal-value" id="recallValue">0%</span>
+              </div>
+            </div>
+            <div class="next-step">
+              <span>Suggested Next Step</span>
+              <p id="diagnosticNextStep">Ask one doubt or paste a problem to start the diagnosis.</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="chat-log" id="chat">
+          <div class="empty-state" id="emptyState">
+            <div class="spark" aria-hidden="true"><i data-lucide="book-open-check"></i></div>
+            <h2>👋 Hi, I am Study Buddy.</h2>
+            <p>I can explain doubts, decode problems step by step, help with revision, and turn your session into flashcards when you are ready.</p>
+          </div>
+        </div>
+
+        <section class="related-topics" id="relatedTopics" aria-label="Related topic suggestions" hidden>
+          <div class="related-head"><i data-lucide="git-branch-plus"></i><span>Related Topics To Try Next</span></div>
+          <div class="related-chips" id="relatedChips"></div>
+        </section>
+
+        <div class="composer">
+          <textarea id="input" rows="1" placeholder="Ask a question..." aria-label="Ask a question"></textarea>
+          <button class="primary-button" id="sendBtn" type="button">
+            <i data-lucide="send-horizontal"></i>
+            Send
+          </button>
+        </div>
+      </main>
+
+      <aside class="study-board" aria-label="Flashcard board">
+        <div class="panel-head">
+          <div class="panel-title">
+            <h2 id="boardTitle">Flashcard Board</h2>
+            <p id="boardSubtitle">Color-coded cards from the current conversation.</p>
+          </div>
+          <div class="status-pill"><i data-lucide="palette"></i><span id="cardCount">0 cards</span></div>
+        </div>
+
+        <div class="board-body" id="board">
+          <div class="board-empty">
+            <div>
+              <h3>No cards yet</h3>
+              <p>After a few chat turns, create a compact study deck from the ideas you covered.</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </div>
+
+  <aside class="calculator-panel" aria-label="Scientific calculator">
+    <div class="calculator-header">
+      <h2>Scientific Calculator</h2>
+      <button class="icon-button" id="calculatorClose" type="button" aria-label="Close calculator" title="Close">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <div class="calc-mode" aria-label="Angle mode">
+      <button id="degMode" class="active" type="button">DEG</button>
+      <button id="radMode" type="button">RAD</button>
+    </div>
+
+    <div class="calc-display" aria-live="polite">
+      <div class="calc-expression" id="calcExpression"></div>
+      <div class="calc-result" id="calcResult">0</div>
+    </div>
+
+    <div class="calc-grid">
+      <button class="calc-key danger" data-action="clear" type="button">AC</button>
+      <button class="calc-key danger" data-action="backspace" type="button">DEL</button>
+      <button class="calc-key function" data-value="(" type="button">(</button>
+      <button class="calc-key function" data-value=")" type="button">)</button>
+      <button class="calc-key operator" data-value="/" type="button">/</button>
+
+      <button class="calc-key function" data-value="sin(" type="button">sin</button>
+      <button class="calc-key function" data-value="cos(" type="button">cos</button>
+      <button class="calc-key function" data-value="tan(" type="button">tan</button>
+      <button class="calc-key function" data-value="sqrt(" type="button">sqrt</button>
+      <button class="calc-key operator" data-value="^" type="button">x^y</button>
+
+      <button class="calc-key function" data-value="log(" type="button">log</button>
+      <button class="calc-key function" data-value="ln(" type="button">ln</button>
+      <button class="calc-key function" data-value="pi" type="button">pi</button>
+      <button class="calc-key function" data-value="e" type="button">e</button>
+      <button class="calc-key operator" data-value="!" type="button">n!</button>
+
+      <button class="calc-key" data-value="7" type="button">7</button>
+      <button class="calc-key" data-value="8" type="button">8</button>
+      <button class="calc-key" data-value="9" type="button">9</button>
+      <button class="calc-key operator" data-value="*" type="button">*</button>
+      <button class="calc-key function" data-value="abs(" type="button">abs</button>
+
+      <button class="calc-key" data-value="4" type="button">4</button>
+      <button class="calc-key" data-value="5" type="button">5</button>
+      <button class="calc-key" data-value="6" type="button">6</button>
+      <button class="calc-key operator" data-value="-" type="button">-</button>
+      <button class="calc-key function" data-value="%" type="button">%</button>
+
+      <button class="calc-key" data-value="1" type="button">1</button>
+      <button class="calc-key" data-value="2" type="button">2</button>
+      <button class="calc-key" data-value="3" type="button">3</button>
+      <button class="calc-key operator" data-value="+" type="button">+</button>
+      <button class="calc-key function" data-action="negate" type="button">+/-</button>
+
+      <button class="calc-key" data-value="0" type="button">0</button>
+      <button class="calc-key" data-value="." type="button">.</button>
+      <button class="calc-key equal" data-action="equals" type="button">=</button>
+      <button class="calc-key function" data-action="insert-answer" type="button">ANS</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+  <script>
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('sendBtn');
+    const flashBtn = document.getElementById('flashBtn');
+    const quizBtn = document.getElementById('quizBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const relatedTopics = document.getElementById('relatedTopics');
+    const relatedChips = document.getElementById('relatedChips');
+    const personalitySelect = document.getElementById('personalitySelect');
+    const board = document.getElementById('board');
+    const boardTitle = document.getElementById('boardTitle');
+    const boardSubtitle = document.getElementById('boardSubtitle');
+    const messageCount = document.getElementById('messageCount');
+    const cardCount = document.getElementById('cardCount');
+    const toast = document.getElementById('toast');
+    const diagnosticSummary = document.getElementById('diagnosticSummary');
+    const diagnosticLevel = document.getElementById('diagnosticLevel');
+    const diagnosticQuestions = document.getElementById('diagnosticQuestions');
+    const diagnosticAnswers = document.getElementById('diagnosticAnswers');
+    const diagnosticWords = document.getElementById('diagnosticWords');
+    const diagnosticFocus = document.getElementById('diagnosticFocus');
+    const diagnosticNextStep = document.getElementById('diagnosticNextStep');
+    const diagnosticSignals = {
+      clarity: {
+        fill: document.getElementById('claritySignal'),
+        value: document.getElementById('clarityValue')
+      },
+      practice: {
+        fill: document.getElementById('practiceSignal'),
+        value: document.getElementById('practiceValue')
+      },
+      recall: {
+        fill: document.getElementById('recallSignal'),
+        value: document.getElementById('recallValue')
+      }
+    };
+    const calculatorToggle = document.getElementById('calculatorToggle');
+    const calculatorClose = document.getElementById('calculatorClose');
+    const calcExpression = document.getElementById('calcExpression');
+    const calcResult = document.getElementById('calcResult');
+    const degMode = document.getElementById('degMode');
+    const radMode = document.getElementById('radMode');
+
+    const messages = [];
+    let calculatorExpression = '';
+    let lastAnswer = 0;
+    let angleMode = 'deg';
+    let toastTimer;
+    let quizState = { total: 0, answered: 0, correct: 0 };
+
+    const API_BASE_URL = (() => {
+      const { protocol, port } = window.location;
+      return protocol.startsWith('http') && port === '8000' ? '' : 'http://127.0.0.1:8000';
+    })();
+
+    async function requestJson(path, options) {
+      let response;
+      try {
+        response = await fetch(`${API_BASE_URL}${path}`, options);
+      } catch (error) {
+        throw new Error('Could not reach the Study Buddy server. Start it with "uv run api" and open http://127.0.0.1:8000.');
+      }
+
+      if (!response.ok) {
+        let message = 'Request failed';
+        try {
+          const payload = await response.json();
+          if (payload && payload.detail) {
+            message = payload.detail;
+          }
+        } catch (_) {
+          message = response.statusText || message;
+        }
+        throw new Error(message);
+      }
+
+      return response.json();
+    }
+
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        send();
+      }
+    });
+
+    input.addEventListener('input', () => {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 132) + 'px';
+    });
+
+    sendBtn.addEventListener('click', send);
+    flashBtn.addEventListener('click', generateCards);
+    quizBtn.addEventListener('click', generateQuiz);
+    clearBtn.addEventListener('click', resetSession);
+
+    calculatorToggle.addEventListener('click', () => {
+      const isOpen = document.body.classList.toggle('calculator-open');
+      calculatorToggle.setAttribute('aria-label', isOpen ? 'Close calculator' : 'Open calculator');
+    });
+
+    calculatorClose.addEventListener('click', () => {
+      document.body.classList.remove('calculator-open');
+      calculatorToggle.setAttribute('aria-label', 'Open calculator');
+    });
+
+    degMode.addEventListener('click', () => setAngleMode('deg'));
+    radMode.addEventListener('click', () => setAngleMode('rad'));
+
+    document.querySelectorAll('.calc-key').forEach((button) => {
+      button.addEventListener('click', () => handleCalculatorKey(button));
+    });
+    updateDiagnostics();
+
+    function updateCounts(cardTotal = null, boardMode = 'cards') {
+      const noteTotal = messages.length;
+      messageCount.textContent = noteTotal === 1 ? '1 note' : noteTotal + ' notes';
+      if (cardTotal !== null) {
+        if (boardMode === 'quiz') {
+          cardCount.textContent = cardTotal === 1 ? '1 quiz item' : cardTotal + ' quiz items';
+        } else {
+          cardCount.textContent = cardTotal === 1 ? '1 card' : cardTotal + ' cards';
+        }
+      }
+      updateDiagnostics();
+    }
+
+    function setBoardMode(mode) {
+      if (mode === 'quiz') {
+        boardTitle.textContent = 'Quiz Board';
+        boardSubtitle.textContent = 'MCQ questions from the current conversation.';
+      } else {
+        boardTitle.textContent = 'Flashcard Board';
+        boardSubtitle.textContent = 'Color-coded cards from the current conversation.';
+      }
+    }
+
+    function updateDiagnostics() {
+      const studentMessages = messages.filter((message) => message.role === 'user');
+      const tutorMessages = messages.filter((message) => message.role === 'assistant');
+      const studentText = studentMessages.map((message) => message.content).join(' ');
+      const words = studentText.match(/\b[\w'-]+\b/g) || [];
+      const avgWords = studentMessages.length ? Math.round(words.length / studentMessages.length) : 0;
+      const focus = detectFocus(studentText);
+      const signals = calculateSignals(studentText, studentMessages.length, tutorMessages.length);
+      const level = getDiagnosticLevel(studentMessages.length, tutorMessages.length);
+
+      diagnosticQuestions.textContent = String(studentMessages.length);
+      diagnosticAnswers.textContent = String(tutorMessages.length);
+      diagnosticWords.textContent = String(avgWords);
+      diagnosticFocus.textContent = focus;
+      diagnosticLevel.textContent = level;
+      diagnosticSummary.textContent = getDiagnosticSummary(studentMessages.length, focus, signals);
+      diagnosticNextStep.textContent = getNextDiagnosticStep(studentMessages.length, tutorMessages.length, focus, signals);
+
+      setSignal('clarity', signals.clarity);
+      setSignal('practice', signals.practice);
+      setSignal('recall', signals.recall);
+    }
+
+    function setSignal(name, value) {
+      const signal = diagnosticSignals[name];
+      signal.fill.style.width = value + '%';
+      signal.value.textContent = value + '%';
+    }
+
+    function calculateSignals(text, questionCount, answerCount) {
+      const lower = text.toLowerCase();
+      const hasWhy = /\b(why|how|explain|concept|meaning|understand)\b/.test(lower);
+      const hasPractice = /\b(solve|calculate|example|practice|problem|equation|steps?)\b/.test(lower);
+      const hasRecall = /\b(remember|revise|recap|summary|formula|definition|flashcard)\b/.test(lower);
+      const hasSpecifics = /\d|[=+\-*/^]|\b(chapter|topic|given|find|because)\b/.test(lower);
+
+      return {
+        clarity: clampSignal(18 + questionCount * 12 + (hasWhy ? 24 : 0) + (hasSpecifics ? 16 : 0)),
+        practice: clampSignal(12 + questionCount * 10 + (hasPractice ? 34 : 0) + Math.min(answerCount, 3) * 8),
+        recall: clampSignal(10 + answerCount * 12 + (hasRecall ? 34 : 0))
+      };
+    }
+
+    function clampSignal(value) {
+      return Math.max(0, Math.min(100, value));
+    }
+
+    function detectFocus(text) {
+      const lower = text.toLowerCase();
+      const focusChecks = [
+        { label: 'Math', pattern: /\b(math|algebra|geometry|calculus|trigonometry|equation|formula|solve|calculate)\b|[=+\-*/^]/ },
+        { label: 'Science', pattern: /\b(physics|chemistry|biology|experiment|atom|force|energy|cell|reaction)\b/ },
+        { label: 'Writing', pattern: /\b(essay|paragraph|grammar|write|summary|letter|sentence)\b/ },
+        { label: 'Exam Prep', pattern: /\b(exam|test|marks|mcq|revision|important|syllabus)\b/ },
+        { label: 'Concepts', pattern: /\b(why|how|explain|understand|meaning|definition)\b/ }
+      ];
+      const match = focusChecks.find((item) => item.pattern.test(lower));
+      return match ? match.label : (text.trim() ? 'General' : 'New');
+    }
+
+    function getDiagnosticLevel(questionCount, answerCount) {
+      if (questionCount === 0) {
+        return 'Baseline';
+      }
+      if (questionCount >= 4 && answerCount >= 3) {
+        return 'Active';
+      }
+      if (answerCount >= 1) {
+        return 'Warming Up';
+      }
+      return 'Started';
+    }
+
+    function getDiagnosticSummary(questionCount, focus, signals) {
+      if (questionCount === 0) {
+        return 'Waiting for the first question.';
+      }
+      const strongest = Object.entries(signals).sort((a, b) => b[1] - a[1])[0][0];
+      const label = strongest.charAt(0).toUpperCase() + strongest.slice(1);
+      return `${focus} session with ${label} as the strongest learning signal.`;
+    }
+
+    function getNextDiagnosticStep(questionCount, answerCount, focus, signals) {
+      if (questionCount === 0) {
+        return 'Ask one doubt or paste a problem to start the diagnosis.';
+      }
+      if (answerCount === 0) {
+        return 'Send the question and wait for the first explanation.';
+      }
+      if (signals.practice < 55) {
+        return `Try one ${focus.toLowerCase()} practice question to check application.`;
+      }
+      if (signals.recall < 55) {
+        return 'Create flashcards or ask for a quick recap to strengthen recall.';
+      }
+      if (signals.clarity < 55) {
+        return 'Ask one "why" or "how" question to sharpen conceptual clarity.';
+      }
+      return 'Attempt a slightly harder follow-up and compare your method with the answer.';
+    }
+
+    function addMessage(text, role, options = {}) {
+      const currentEmptyState = document.getElementById('emptyState');
+      if (currentEmptyState) {
+        currentEmptyState.remove();
+      }
+
+      const div = document.createElement('div');
+      div.className = 'message ' + role;
+      if (role === 'bot') {
+        div.innerHTML = (options.liveSearchUsed
+          ? '<div class="live-search-badge"><i data-lucide="search-check"></i> Live search used</div>'
+          : '') + marked.parse(text);
+      } else {
+        div.textContent = text;
+      }
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    function showThinking() {
+      const div = document.createElement('div');
+      div.className = 'thinking';
+      div.id = 'thinking';
+      div.innerHTML = '<span></span><span></span><span></span>';
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function hideThinking() {
+      const el = document.getElementById('thinking');
+      if (el) {
+        el.remove();
+      }
+    }
+
+    function setLoading(isLoading) {
+      sendBtn.disabled = isLoading;
+      input.disabled = isLoading;
+      relatedChips.querySelectorAll('button').forEach((button) => {
+        button.disabled = isLoading;
+      });
+      sendBtn.innerHTML = isLoading
+        ? '<i data-lucide="loader-circle"></i> Thinking'
+        : '<i data-lucide="send-horizontal"></i> Send';
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    async function send() {
+      const query = input.value.trim();
+      if (!query) {
+        return;
+      }
+      await submitQuestion(query);
+    }
+
+    async function submitQuestion(query) {
+      addMessage(query, 'user');
+      messages.push({ role: 'user', content: query });
+      updateCounts();
+      renderRelatedTopics(buildRelatedSuggestions(query));
+      input.value = '';
+      input.style.height = 'auto';
+      showThinking();
+      setLoading(true);
+
+      try {
+        const data = await requestJson('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query,
+            personality: personalitySelect.value,
+            messages
+          })
+        });
+        hideThinking();
+        addMessage(data.response, 'bot', { liveSearchUsed: data.live_search_used });
+        messages.push({ role: 'assistant', content: data.response });
+        updateCounts();
+        renderRelatedTopics(buildRelatedSuggestions(query + ' ' + data.response));
+      } catch (error) {
+        hideThinking();
+        showToast('Could not get an answer: ' + error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function renderRelatedTopics(suggestions) {
+      relatedChips.innerHTML = '';
+      if (!suggestions.length) {
+        relatedTopics.hidden = true;
+        return;
+      }
+
+      suggestions.forEach((suggestion) => {
+        const button = document.createElement('button');
+        button.className = 'topic-chip';
+        button.type = 'button';
+        button.textContent = suggestion.label;
+        button.title = suggestion.question;
+        button.addEventListener('click', () => {
+          submitQuestion(suggestion.question);
+        });
+        relatedChips.appendChild(button);
+      });
+      relatedTopics.hidden = false;
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    function buildRelatedSuggestions(seedText = '') {
+      const sessionText = messages
+        .slice(-6)
+        .map((message) => message.content)
+        .join(' ');
+      const combinedText = `${sessionText} ${seedText}`.trim();
+      if (!combinedText) {
+        return [];
+      }
+
+      const focus = detectFocus(combinedText);
+      const topic = detectSuggestionTopic(combinedText, focus);
+      const suggestions = [
+        {
+          label: `Review: ${topic}`,
+          question: `Explain the key idea behind ${topic} in simple words.`
+        },
+        {
+          label: `Practice: ${topic}`,
+          question: `Give me one related practice question on ${topic} and solve it step by step.`
+        }
+      ];
+
+      if (/\b(mistake|wrong|confus|trap|exam|test|marks|steps?|solve|calculate)\b/i.test(combinedText)) {
+        suggestions.push({
+          label: `Mistakes: ${topic}`,
+          question: `What are the common mistakes students make in ${topic}, and how can I avoid them?`
+        });
+      } else {
+        suggestions.push({
+          label: `Example: ${topic}`,
+          question: `Show me one clear example related to ${topic}.`
+        });
+      }
+
+      suggestions.push({
+        label: `MCQ: ${topic}`,
+        question: `Ask me one MCQ about ${topic} and explain the answer after I respond.`
+      });
+
+      return suggestions.slice(0, 4);
+    }
+
+    function detectSuggestionTopic(text, focus) {
+      const lower = text.toLowerCase();
+      const topicRules = [
+        { label: 'linear equations', pattern: /\b(linear equation|equation|solve for|x\s*[=+\-*/]|[0-9]\s*x)\b|[=]/ },
+        { label: 'formulas', pattern: /\b(formula|theorem|identity|rule)\b/ },
+        { label: 'step-by-step solving', pattern: /\b(step|method|process|solve|calculate|find)\b/ },
+        { label: 'exam revision', pattern: /\b(exam|test|marks|revision|mcq|important)\b/ },
+        { label: 'definitions and meanings', pattern: /\b(define|definition|meaning|what is|concept)\b/ },
+        { label: 'examples and applications', pattern: /\b(example|application|real life|use case)\b/ },
+        { label: 'science concepts', pattern: /\b(physics|chemistry|biology|atom|force|energy|cell|reaction)\b/ },
+        { label: 'writing improvement', pattern: /\b(essay|paragraph|grammar|sentence|write|summary)\b/ }
+      ];
+      const match = topicRules.find((item) => item.pattern.test(lower));
+      if (match) {
+        return match.label;
+      }
+
+      const keyword = extractKeywordTopic(lower);
+      if (keyword) {
+        return keyword;
+      }
+      return focus === 'New' ? 'this topic' : focus.toLowerCase();
+    }
+
+    function extractKeywordTopic(text) {
+      const stopWords = new Set([
+        'about', 'after', 'again', 'answer', 'because', 'before', 'could', 'explain',
+        'first', 'from', 'give', 'have', 'help', 'into', 'like', 'make', 'need',
+        'question', 'related', 'should', 'show', 'solve', 'step', 'study', 'that',
+        'their', 'there', 'this', 'topic', 'what', 'when', 'where', 'which', 'with',
+        'would', 'your'
+      ]);
+      const words = text.match(/\b[a-z][a-z'-]{3,}\b/g) || [];
+      const counts = {};
+      words.forEach((word) => {
+        if (!stopWords.has(word)) {
+          counts[word] = (counts[word] || 0) + 1;
+        }
+      });
+      const ranked = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      return ranked.length ? ranked[0][0] : '';
+    }
+
+    async function generateCards() {
+      if (!messages.length) {
+        showToast('Start a chat first, then create flashcards.');
+        return;
+      }
+
+      flashBtn.disabled = true;
+      flashBtn.innerHTML = '<i data-lucide="loader-circle"></i> Creating';
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      try {
+        const data = await requestJson('/api/flashcards', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages })
+        });
+        renderFlashcards(data);
+      } catch (error) {
+        showToast('Could not create flashcards: ' + error.message);
+      } finally {
+        flashBtn.disabled = false;
+        flashBtn.innerHTML = '<i data-lucide="layers-3"></i> Flashcards';
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }
+    }
+
+    async function generateQuiz() {
+      if (!messages.length) {
+        showToast('Start a chat first, then make a quiz from the topics you discussed.');
+        return;
+      }
+
+      quizBtn.disabled = true;
+      quizBtn.innerHTML = '<i data-lucide="loader-circle"></i> Making';
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+
+      try {
+        const data = await requestJson('/api/quiz', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages })
+        });
+        renderQuiz(data);
+      } catch (error) {
+        showToast('Could not create quiz: ' + error.message);
+      } finally {
+        quizBtn.disabled = false;
+        quizBtn.innerHTML = '<i data-lucide="circle-help"></i> Quiz';
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }
+    }
+
+    function renderQuiz(payload) {
+      const summary = Array.isArray(payload.summary) ? payload.summary : [];
+      const questions = Array.isArray(payload.questions) ? payload.questions : [];
+      setBoardMode('quiz');
+      quizState = { total: questions.length, answered: 0, correct: 0 };
+      board.innerHTML = '';
+
+      const summaryStrip = document.createElement('div');
+      summaryStrip.className = 'summary-strip';
+      const modeChip = document.createElement('div');
+      modeChip.className = 'summary-chip';
+      modeChip.textContent = 'MCQ quiz from discussed topics';
+      summaryStrip.appendChild(modeChip);
+      summary.forEach((item) => {
+        const chip = document.createElement('div');
+        chip.className = 'summary-chip';
+        chip.textContent = item;
+        summaryStrip.appendChild(chip);
+      });
+      board.appendChild(summaryStrip);
+
+      const grid = document.createElement('div');
+      grid.className = 'flash-grid';
+      questions.forEach((question, index) => {
+        const item = document.createElement('article');
+        item.className = 'flashcard quiz-card';
+        item.innerHTML = `
+          <div class="flashcard-top">
+            <div class="flashcard-number">${index + 1}</div>
+            <i data-lucide="list-checks"></i>
+          </div>
+          <h3></h3>
+          <p class="question"></p>
+          <div class="mcq-options"></div>
+          <p class="quiz-feedback"></p>
+        `;
+
+        item.querySelector('h3').textContent = question.title || 'Quiz question';
+        item.querySelector('.question').textContent = question.question || '';
+        const optionsEl = item.querySelector('.mcq-options');
+        const correctIndex = Number.isInteger(question.correct_index) ? question.correct_index : 0;
+        const letters = ['A', 'B', 'C', 'D'];
+
+        (question.options || []).slice(0, 4).forEach((option, optionIndex) => {
+          const button = document.createElement('button');
+          button.className = 'mcq-option';
+          button.type = 'button';
+          button.innerHTML = '<span class="option-letter"></span><span class="option-text"></span>';
+          button.querySelector('.option-letter').textContent = letters[optionIndex];
+          button.querySelector('.option-text').textContent = option;
+          button.addEventListener('click', () => {
+            markQuizAnswer(item, optionIndex, correctIndex, question.explanation || '');
+          });
+          optionsEl.appendChild(button);
+        });
+
+        grid.appendChild(item);
+      });
+      board.appendChild(grid);
+
+      const scorePanel = document.createElement('section');
+      scorePanel.className = 'quiz-score-panel';
+      scorePanel.setAttribute('aria-live', 'polite');
+      scorePanel.innerHTML = `
+        <div class="quiz-score-top">
+          <h3>Quiz Score</h3>
+          <div class="quiz-score-value" id="quizScoreValue">0 / ${questions.length}</div>
+        </div>
+        <div class="quiz-score-progress"><div class="quiz-score-fill" id="quizScoreFill"></div></div>
+        <p id="quizScoreComment">Answer all questions to see your appreciation note.</p>
+      `;
+      board.appendChild(scorePanel);
+      updateQuizScore();
+      updateCounts(questions.length, 'quiz');
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    function markQuizAnswer(card, selectedIndex, correctIndex, explanation) {
+      const buttons = Array.from(card.querySelectorAll('.mcq-option'));
+      buttons.forEach((button, index) => {
+        button.disabled = true;
+        if (index === correctIndex) {
+          button.classList.add('correct');
+        } else if (index === selectedIndex) {
+          button.classList.add('incorrect');
+        }
+      });
+
+      const selectedLetter = ['A', 'B', 'C', 'D'][selectedIndex] || '';
+      const correctLetter = ['A', 'B', 'C', 'D'][correctIndex] || '';
+      const isCorrect = selectedIndex === correctIndex;
+      const feedback = card.querySelector('.quiz-feedback');
+      feedback.textContent = isCorrect
+        ? `Correct. ${explanation}`
+        : `Not quite. You chose ${selectedLetter}; the correct answer is ${correctLetter}. ${explanation}`;
+      card.classList.add('answered');
+      quizState.answered += 1;
+      if (isCorrect) {
+        quizState.correct += 1;
+      }
+      updateQuizScore();
+    }
+
+    function updateQuizScore() {
+      const scoreValue = document.getElementById('quizScoreValue');
+      const scoreFill = document.getElementById('quizScoreFill');
+      const scoreComment = document.getElementById('quizScoreComment');
+      if (!scoreValue || !scoreFill || !scoreComment || !quizState.total) {
+        return;
+      }
+
+      const percent = Math.round((quizState.correct / quizState.total) * 100);
+      const answeredText = `${quizState.answered}/${quizState.total} answered`;
+      scoreValue.textContent = `${quizState.correct} / ${quizState.total}`;
+      scoreFill.style.width = percent + '%';
+
+      if (quizState.answered < quizState.total) {
+        scoreComment.textContent = `${answeredText}. Keep going, you are building momentum.`;
+        return;
+      }
+
+      scoreComment.textContent = getScoreComment(percent);
+    }
+
+    function getScoreComment(percent) {
+      if (percent === 100) {
+        return 'Excellent work. You nailed every question with strong recall.';
+      }
+      if (percent >= 80) {
+        return 'Great job. You understand the topic well, with only a little polishing left.';
+      }
+      if (percent >= 60) {
+        return 'Good effort. You have the foundation, now review the missed answers once.';
+      }
+      if (percent >= 40) {
+        return 'Nice attempt. Revisit the explanations and try the quiz again for a sharper score.';
+      }
+      return 'Good start. Focus on the basics first, then retry these questions with fresh confidence.';
+    }
+
+    function renderFlashcards(payload, mode = 'flashcards') {
+      const summary = Array.isArray(payload.summary) ? payload.summary : [];
+      const cards = Array.isArray(payload.cards) ? payload.cards : [];
+      setBoardMode(mode === 'quiz' ? 'quiz' : 'flashcards');
+      board.innerHTML = '';
+
+      const summaryStrip = document.createElement('div');
+      summaryStrip.className = 'summary-strip';
+      const modeChip = document.createElement('div');
+      modeChip.className = 'summary-chip';
+      modeChip.textContent = mode === 'quiz' ? 'Quiz from discussed topics' : 'Flashcards from discussed topics';
+      summaryStrip.appendChild(modeChip);
+      summary.forEach((item) => {
+        const chip = document.createElement('div');
+        chip.className = 'summary-chip';
+        chip.textContent = item;
+        summaryStrip.appendChild(chip);
+      });
+      board.appendChild(summaryStrip);
+
+      const grid = document.createElement('div');
+      grid.className = 'flash-grid';
+      cards.forEach((card, index) => {
+        const item = document.createElement('article');
+        item.className = mode === 'quiz' ? 'flashcard quiz-card' : 'flashcard';
+        item.innerHTML = `
+          <div class="flashcard-top">
+            <div class="flashcard-number">${index + 1}</div>
+            <i data-lucide="${mode === 'quiz' ? 'circle-help' : 'badge-check'}"></i>
+          </div>
+          <h3></h3>
+          <p class="question"></p>
+          <p class="answer"></p>
+          ${mode === 'quiz'
+            ? '<div class="quiz-actions"><button class="reveal-button" type="button">Show answer</button><button class="quiz-check review" type="button">Review</button><button class="quiz-check correct" type="button">Correct</button></div>'
+            : '<button class="reveal-button" type="button">Reveal answer</button>'}
+        `;
+
+        item.querySelector('h3').textContent = mode === 'quiz'
+          ? card.title || 'Quiz question'
+          : card.title || 'Study card';
+        item.querySelector('.question').textContent = card.question || '';
+        item.querySelector('.answer').textContent = card.answer || '';
+        item.querySelector('.reveal-button').addEventListener('click', (event) => {
+          item.classList.toggle('revealed');
+          event.currentTarget.textContent = item.classList.contains('revealed')
+            ? 'Hide answer'
+            : mode === 'quiz' ? 'Show answer' : 'Reveal answer';
+        });
+        if (mode === 'quiz') {
+          item.querySelectorAll('.quiz-check').forEach((button) => {
+            button.addEventListener('click', (event) => {
+              item.classList.add('revealed');
+              event.currentTarget.textContent = event.currentTarget.classList.contains('correct')
+                ? 'Got it'
+                : 'Marked';
+            });
+          });
+        }
+        grid.appendChild(item);
+      });
+      board.appendChild(grid);
+      updateCounts(cards.length, mode === 'quiz' ? 'quiz' : 'cards');
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    function resetSession() {
+      messages.length = 0;
+      chat.innerHTML = `
+        <div class="empty-state" id="emptyState">
+          <div class="spark" aria-hidden="true"><i data-lucide="book-open-check"></i></div>
+          <h2>👋 Hi, I am Study Buddy.</h2>
+          <p>I can explain doubts, decode problems step by step, help with revision, and turn your session into flashcards when you are ready.</p>
+        </div>
+      `;
+      board.innerHTML = `
+        <div class="board-empty">
+          <div>
+            <h3>No cards yet</h3>
+            <p>After a few chat turns, create a compact study deck from the ideas you covered.</p>
+          </div>
+        </div>
+      `;
+      setBoardMode('flashcards');
+      renderRelatedTopics([]);
+      updateCounts(0);
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    function showToast(message) {
+      clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+    }
+
+    function setAngleMode(mode) {
+      angleMode = mode;
+      degMode.classList.toggle('active', mode === 'deg');
+      radMode.classList.toggle('active', mode === 'rad');
+      updateCalculatorDisplay();
+    }
+
+    function handleCalculatorKey(button) {
+      const action = button.dataset.action;
+      const value = button.dataset.value;
+
+      if (action === 'clear') {
+        calculatorExpression = '';
+      } else if (action === 'backspace') {
+        calculatorExpression = calculatorExpression.slice(0, -1);
+      } else if (action === 'equals') {
+        calculateResult(true);
+        return;
+      } else if (action === 'insert-answer') {
+        calculatorExpression += formatNumber(lastAnswer);
+      } else if (action === 'negate') {
+        calculatorExpression = calculatorExpression ? '-(' + calculatorExpression + ')' : '-';
+      } else if (value) {
+        calculatorExpression += value;
+      }
+
+      updateCalculatorDisplay();
+    }
+
+    function updateCalculatorDisplay() {
+      calcExpression.textContent = calculatorExpression;
+      if (!calculatorExpression) {
+        calcResult.textContent = '0';
+        return;
+      }
+      calculateResult(false);
+    }
+
+    function calculateResult(commit) {
+      try {
+        const result = evaluateExpression(calculatorExpression);
+        calcResult.textContent = formatNumber(result);
+        if (commit) {
+          lastAnswer = result;
+          calculatorExpression = formatNumber(result);
+          calcExpression.textContent = '';
+        }
+      } catch (error) {
+        calcResult.textContent = commit ? 'Error' : '';
+      }
+    }
+
+    function evaluateExpression(expression) {
+      if (!expression.trim()) return 0;
+      const translated = translateExpression(expression);
+      const fn = new Function(
+        'sin', 'cos', 'tan', 'sqrt', 'log', 'ln', 'abs', 'factorial', 'pi', 'e',
+        '"use strict"; return (' + translated + ');'
+      );
+      const result = fn(
+        trig(Math.sin),
+        trig(Math.cos),
+        trig(Math.tan),
+        Math.sqrt,
+        Math.log10,
+        Math.log,
+        Math.abs,
+        factorial,
+        Math.PI,
+        Math.E
+      );
+      if (!Number.isFinite(result)) throw new Error('Invalid result');
+      return result;
+    }
+
+    function translateExpression(expression) {
+      let translated = expression
+        .replace(/\s+/g, '')
+        .replace(/\^/g, '**')
+        .replace(/%/g, '/100');
+
+      translated = applyFactorials(translated);
+      translated = addImplicitMultiplication(translated);
+
+      if (!/^[0-9+\-*/().,a-zA-Z_*]+$/.test(translated)) {
+        throw new Error('Unsupported characters');
+      }
+
+      const unknownNames = translated.replace(/sin|cos|tan|sqrt|log|ln|abs|factorial|pi|e/g, '');
+      if (/[a-zA-Z]/.test(unknownNames)) {
+        throw new Error('Unsupported function');
+      }
+
+      return translated;
+    }
+
+    function addImplicitMultiplication(expression) {
+      return expression
+        .replace(/(\d|\)|pi|e)(?=(sin|cos|tan|sqrt|log|ln|abs|factorial|\(|pi|e))/g, '$1*')
+        .replace(/(\)|pi|e)(?=\d)/g, '$1*');
+    }
+
+    function applyFactorials(expression) {
+      let next = expression;
+      const factorialPattern = /(\d+(?:\.\d+)?|\([^()]*\))!/;
+      while (factorialPattern.test(next)) {
+        next = next.replace(factorialPattern, 'factorial($1)');
+      }
+      return next;
+    }
+
+    function factorial(value) {
+      const number = Number(value);
+      if (!Number.isInteger(number) || number < 0 || number > 170) {
+        throw new Error('Invalid factorial');
+      }
+      let total = 1;
+      for (let index = 2; index <= number; index += 1) {
+        total *= index;
+      }
+      return total;
+    }
+
+    function trig(fn) {
+      return (value) => fn(angleMode === 'deg' ? value * Math.PI / 180 : value);
+    }
+
+    function formatNumber(value) {
+      if (Math.abs(value) >= 1e12 || (Math.abs(value) > 0 && Math.abs(value) < 1e-9)) {
+        return value.toExponential(8).replace(/\.?0+e/, 'e');
+      }
+      return Number.parseFloat(value.toPrecision(12)).toString();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "summary": [
+    "Current Chief Minister of Kerala is Pinarayi Vijayan.",
+    "Python is an interpreted, high-level programming language known for its ease of use.",
+    "Java is a compiled, high-level programming language designed for platform independence."
+  ],
+  "cards": [
+    {
+      "title": "Chief Minister of Kerala",
+      "question": "Who is the current Chief Minister of Kerala?",
+      "answer": "Pinarayi Vijayan."
+    },
+    {
+      "title": "Characteristics of Python",
+      "question": "What are key features of Python?",
+      "answer": "Dynamic typing, readable syntax, and extensive libraries."
+    },
+    {
+      "title": "Characteristics of Java",
+      "question": "What makes Java platform-independent?",
+      "answer": "It utilizes the Java Virtual Machine (JVM) to run on any device."
+    }
+  ]
+}

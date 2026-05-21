@@ -1,0 +1,48 @@
+learning_guidance:
+  description: >
+    Give the user the clear correct answer to their question ({query})
+    first. Provide the step-by-step solution with reasoning so they get
+    the right answer immediately. Then explain what their specific
+    drawback or mistake was and why it's wrong.
+  expected_output: >
+    An answer-first response with: (1) the clear correct answer stated
+    upfront, (2) step-by-step solution with reasoning, (3) what the user
+    got wrong and why.
+  agent: learning_guide
+
+problem_decoding:
+  description: >
+    Analyze the user's query ({query}) and identify their specific mistake,
+    misconception, or drawback. Pinpoint exactly where their understanding
+    is wrong, what step they missed, or what concept they misunderstood.
+  expected_output: >
+    A clear diagnosis of the user's drawback: (1) what mistake or
+    misconception was detected, (2) why it's incorrect, (3) what the
+    correct understanding should be.
+  agent: problem_decoder
+
+cognitive_analysis:
+  description: >
+    Provide 2-3 worked examples that specifically target the user's
+    identified drawback. Each example should address a similar pitfall
+    and show side-by-side comparison of the wrong vs correct approach
+    where applicable.
+  expected_output: >
+    2-3 targeted examples, each with: (1) the example problem,
+    (2) common mistaken approach, (3) correct approach with
+    step-by-step solution, (4) final answer.
+  agent: cognitive_analyst
+
+adaptive_assessment:
+  description: >
+    Create 2-3 practice problems that specifically test the area where
+    the user struggled. Include answer keys with step-by-step solutions,
+    "watch out for" tips that warn about the mistake the user made, and
+    actionable suggestions on what the student should study or practice
+    next to improve.
+  expected_output: >
+    2-3 practice problems with: (1) problem statements targeting the
+    user's weak area, (2) answer keys with step-by-step solutions,
+    (3) "watch out for" tips highlighting common mistakes,
+    (4) personalized suggestions for what to study or practice next.
+  agent: assessment_examiner
