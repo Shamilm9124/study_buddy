@@ -1,24 +1,24 @@
 {
   "summary": [
-    "Current Chief Minister of Kerala is Pinarayi Vijayan.",
-    "Python is an interpreted, high-level programming language known for its ease of use.",
-    "Java is a compiled, high-level programming language designed for platform independence."
+    "Comparison of Python and Java",
+    "Syntax Differences: Python vs Java",
+    "Compilation and Interpretation: Execution Models"
   ],
   "cards": [
     {
-      "title": "Chief Minister of Kerala",
-      "question": "Who is the current Chief Minister of Kerala?",
-      "answer": "Pinarayi Vijayan."
+      "title": "Syntax Comparison",
+      "question": "How does Python syntax differ from Java syntax?",
+      "answer": "Python has a simpler and more readable syntax, allowing for fewer lines of code, while Java syntax is more complex and requires code to be enclosed within classes."
     },
     {
-      "title": "Characteristics of Python",
-      "question": "What are key features of Python?",
-      "answer": "Dynamic typing, readable syntax, and extensive libraries."
+      "title": "Execution Model",
+      "question": "What is the difference between compilation in Java and interpretation in Python?",
+      "answer": "Python is an interpreted language which translates code at runtime, while Java compiles code into bytecode that runs on the Java Virtual Machine (JVM)."
     },
     {
-      "title": "Characteristics of Java",
-      "question": "What makes Java platform-independent?",
-      "answer": "It utilizes the Java Virtual Machine (JVM) to run on any device."
+      "title": "Java Features",
+      "question": "What makes Java a robust programming language?",
+      "answer": "Java emphasizes reliability through strong memory management, exception handling, and type checking, which minimizes errors."
     }
   ]
 }

@@ -25,8 +25,8 @@ Required shape:
 }
 
 Rules:
-- Include 2 to 3 summary concepts.
-- Include 2 to 3 flashcards.
+- Include 4 to 5 summary concepts.
+- Include 3 to 5 flashcards.
 - Each card must have title, question, and answer.
 - Base every item only on the conversation below.
 
